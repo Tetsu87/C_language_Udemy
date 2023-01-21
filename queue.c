@@ -92,6 +92,7 @@ int main()
 
         default:
             printf("Invalid choice, valid operations are 1 -3\n");
+            printf("Invalid choice, valid operations are 1 -3\n");
         }
     }
 
