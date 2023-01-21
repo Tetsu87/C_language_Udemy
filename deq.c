@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define SIZE 5
+#define SIZE 20
 
 typedef struct
 {
@@ -9,38 +9,60 @@ typedef struct
     int rear, front;
 } Queue;
 
-yyoyoyo
-
 // function prototypes
 void initQueue(Queue *);
-void enqueue(Queue *, int);
-int dequeue(Queue *);
+void ins_at_rear(Queue *, int);
+int del_from_rear(Queue *);
+void ins_at_front(Queue *, int);
+int del_from_front(Queue *);
 
 void initQueue(Queue *qp)
 {
-    qp->front = SIZE-1;
-    qp->rear = SIZE-1;
+    qp->front = 0;
+    qp->rear = -1;
 }
 
-void enqueue(Queue *qp, int v)
+void ins_at_rear(Queue *qp, int v)
 {
-    if ((qp->rear +1)%SIZE == qp->front)
+    if (qp->rear == SIZE - 1)
     {
-        printf("Queue overflow\n");
+        printf("Unable to insert at the rear end\n");
         return;
     }
-    qp->rear = (qp->rear+1)%SIZE;
+    qp->rear++;
     qp->item[qp->rear] = v;
 }
 
-int dequeue(Queue *qp)
+int del_from_rear(Queue *qp)
 {
-    if (qp->rear == qp->front)
+    if (qp->front > qp->rear)
     {
         return -9999;
     }
-    qp->front = (qp->front+1) % SIZE;
+    int v = qp->item[qp->rear];
+    qp->rear--;
+    return v;
+}
+
+void ins_at_front(Queue *qp, int v)
+{
+    if (qp->front == 0)
+    {
+        printf("Unable to insert at the rear end\n");
+        return;
+    }
+    qp->front--;
+    qp->item[qp->front] = v;
+}
+
+int del_from_front(Queue *qp)
+{
+    if (qp->front > qp->rear)
+    {
+        return -9999;
+    }
     int v = qp->item[qp->front];
+    qp->front--;
     return v;
 }
 
@@ -48,9 +70,11 @@ void menu()
 {
     printf("-----FIFO Queue Operations-----");
     printf("-------------------------------\n");
-    printf("1. Enqueue\n");
-    printf("2. Dequeue\n");
-    printf("3. Quit\n");
+    printf("1. Insert at rear\n");
+    printf("2. Insert at front\n");
+    printf("3. Delete from rear\n");
+    printf("4. Delete from front\n");
+    printf("5. Quit\n");
     printf("-------------------------------");
 }
 
@@ -72,29 +96,45 @@ int main()
         switch (choice)
         {
         case 1:
-            printf("Input value to enqueue: ");
+            printf("Input value to insert at rear: ");
             scanf("%d", &value);
-            enqueue(&q, value);
+            ins_at_rear(&q, value);
             break;
 
         case 2:
-            value = dequeue(&q);
+            printf("Input value to insert at front: ");
+            scanf("%d", &value);
+            ins_at_front(&q, value);
+            break;
+        case 3:
+            value = del_from_rear(&q);
             if (value == -9999)
             {
                 printf("Queue underflow\n");
             }
             else
             {
-                printf("Deleted value: %d\n", value);
+                printf("Deleted from front, value: %d\n", value);
             }
             break;
-        case 3:
+        case 4:
+            value = del_from_front(&q);
+            if (value == -9999)
+            {
+                printf("Queue underflow\n");
+            }
+            else
+            {
+                printf("Deleted from front, value: %d\n", value);
+            }
+            break;
+
+        case 5:
             quit = 1;
             break;
 
         default:
-            printf("Invalid choice, valid operations are 1 -3\n");
-            printf("Invalid choice, valid operations are 1 -3\n");
+            printf("Invalid choice, valid operations are 1 - 5\n");
         }
     }
 
